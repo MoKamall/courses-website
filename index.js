@@ -808,6 +808,11 @@ async function runlogin(req,res){
     var queryRequest = new mssql.Request(conn);
     queryRequest.input('mail', req.body.id)
     var queryResult = await queryRequest.query('select id from Users where email = @mail')
+    if (queryResult.recordset.length == 0) {
+        res.render('login',{error:"The username or password is incorrect"});
+        conn.close();
+        return;
+    }
     request.input('id', queryResult.recordset[0].id)
     request.input('password',req.body.password)
     request.output('success',mssql.Bit)
@@ -830,7 +835,7 @@ async function runlogin(req,res){
         }
     }
     else{
-        res.render('login',{error:"The username or password is incorrect"})
+        res.render('login',{error:"The username or password is incorrect"});
         conn.close();
     }
 }
