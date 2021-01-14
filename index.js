@@ -1064,12 +1064,16 @@ app.get('/admin/requested_courses', async function (req, res){
 app.post("/admin/issue_promocode", async function(req, res){
     if(req.session.iid && req.session.type == 1){
         try{
-            let output = await runProcedure(req.body, "AdminIssuePromocodeToStudent");
-            res.redirect("/admin");
+            var output = await runProcedure(req.body, "AdminIssuePromocodeToStudent");
         }
         catch(err){
             console.log(err)
+        }
+        if(output.failure == 1){
             res.render("admin/issueForm", {error: "Invalid code or student ID"});
+        }
+        else{
+            res.redirect("/admin");
         }
     }
     else{
