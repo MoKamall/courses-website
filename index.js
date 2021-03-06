@@ -497,7 +497,7 @@ app.post('/register', async function(req, res) {
     procName = (req.body.regType == 'true') ? "studentRegister": "InstructorRegister";
     delete req.body["regType"];
     let output = await runProcedure(req.body, procName);
-    if (output.failure = 0) {
+    if (output.failure == 0) {
         res.redirect('/login');
     } else {
         res.render('registration', {error : "This mail already exists."})
